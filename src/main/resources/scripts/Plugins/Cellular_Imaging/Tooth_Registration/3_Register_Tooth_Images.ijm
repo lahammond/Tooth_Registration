@@ -73,11 +73,13 @@ for (FolderNum=0; FolderNum<listOfPaths.length; FolderNum++) {
 			for (Tooth=ToothStart; Tooth<annfiles.length; Tooth++) {				
 				
 				// Register Annotated to CRP
-				print("\\Update4:Registering tooth number "+Tooth+".");
+				print("\\Update4:Registering tooth number "+(Tooth+1)+".");
 				
 				print("\\Update5: Registering Annotation to CRP image...");
 				
 				open(Annotated_images + annfiles[Tooth]);
+				
+				NewTitle = clean_title(annfiles[Tooth]);
 				rename("Annotated");
 				setBatchMode("show");
 				
@@ -91,8 +93,6 @@ for (FolderNum=0; FolderNum<listOfPaths.length; FolderNum++) {
 				setTool("multipoint");
 
 				waitForUser("Click on corresponding points in both the Annotated and CRP image, the click OK.");
-
-
 				
 				run("Landmark Correspondences", "source_image=Annotated template_image=CRP transformation_method=[Least Squares] alpha=1 mesh_resolution=32 transformation_class=Affine interpolate");
 
@@ -110,7 +110,6 @@ for (FolderNum=0; FolderNum<listOfPaths.length; FolderNum++) {
 				run("Green");
 				setBatchMode("show");
 
-				
 				
 				//2nd pass - now 100 loops
 				waitForUser("Does the transformation look correct? If not, close both of the transformed images and adjust the corresponding points before clicking OK. Close all images to stop at current tooth.");
@@ -148,7 +147,11 @@ for (FolderNum=0; FolderNum<listOfPaths.length; FolderNum++) {
 				
 				closewindow("Composite");
 				selectWindow("TransformedAnnotated");
+				//removed 16-bit and saving as annotated
+				
+				save(FullRes_out + NewTitle+"_Annotation.tif");
 				run("16-bit");
+				rename("TransformedAnnotated");
 				setBatchMode("hide");
 				
 				//save(Reg_Ann_out + newanntitle);
@@ -231,7 +234,7 @@ for (FolderNum=0; FolderNum<listOfPaths.length; FolderNum++) {
 
 				print("\\Update6: Registering DMP to CRP image... Complete!");
 				
-				print("\\Update8: Saving registered images...");
+				print("\\Update8:Saving registered images...");
 
 				open(AF_out + AFfiles[Tooth]);
 				rename("AF");
@@ -248,17 +251,16 @@ for (FolderNum=0; FolderNum<listOfPaths.length; FolderNum++) {
 				run("Blue");
 				setSlice(4);
 				run("Grays");
-				
-				newanntitle = tif_title(annfiles[Tooth]);
-				
-				save(FullRes_out + newanntitle);//closewindow("TransformedDMP");
+								
+							
+				save(FullRes_out + NewTitle+".tif");//closewindow("TransformedDMP");
 				//closewindow("DMP");
 				//closewindow("CRP");
 				run("Size...", "width=500 constrain average interpolation=Bilinear");
-				save(Preview_out + newanntitle);
+				save(Preview_out + NewTitle+".tif");
 				close("*");
 
-				print("\\Update8: Saving registered images... Complete!");
+				print("\\Update8:Saving registered images... Complete!");
 								
 				
 			}
@@ -274,7 +276,7 @@ for (FolderNum=0; FolderNum<listOfPaths.length; FolderNum++) {
 			
 			endtime = getTime();
 			dif = (endtime-starttime)/1000;
-			print("\\Update9:Processing time =", (dif/60), "minutes");
+			print("\\Update10:Processing time =", (dif/60), "minutes");
 			
 			
 			selectWindow("Log");
@@ -357,13 +359,13 @@ function closewindow(windowname) {
   		
 }
 
-function tif_title(imagename){
+function clean_title(imagename){
 	new = split(imagename, "/");
 	if (new.length > 1) {
 		imagename = new[new.length-1];
 	} 
 	nl=lengthOf(imagename);
-	nl2=nl-3;
+	nl2=nl-4;
 	Sub_Title=substring(imagename,0,nl2);
 	Sub_Title = replace(Sub_Title, "(", "_");
 	Sub_Title = replace(Sub_Title, ")", "_");
@@ -372,6 +374,5 @@ function tif_title(imagename){
 	Sub_Title = replace(Sub_Title, " ", "_");
 	Sub_Title = replace(Sub_Title, "%", "_");
 	Sub_Title = replace(Sub_Title, "&", "_");
-	Sub_Title=Sub_Title+"tif";
 	return Sub_Title;
 }

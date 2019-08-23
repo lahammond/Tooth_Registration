@@ -13,7 +13,7 @@
 	</parent>
 
 	<groupId>com.zuckerman.cellularimaging</groupId>
-	<version>0.2.1-SNAPSHOT</version>
+	<version>0.2.4-SNAPSHOT</version>
 
 	<name>Tooth_Registration</name>
 	<url>https://zuckermaninstitute.columbia.edu</url>
