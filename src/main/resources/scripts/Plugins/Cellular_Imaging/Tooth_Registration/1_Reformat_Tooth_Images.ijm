@@ -133,7 +133,7 @@ for (FolderNum=0; FolderNum<listOfPaths.length; FolderNum++) {
 			for(i=0; i<files.length; i++) {				
 				image = files[i];	
 									
-				print("\\Update10:   Processing autofluorescence image " + (i+1) +" of " + files.length +".");
+				print("\\Update10:   Processing DMP image " + (i+1) +" of " + files.length +".");
 					
 				run("Bio-Formats Importer", "open=[" + DMP_images + image + "] autoscale color_mode=Default view=Hyperstack stack_order=XYCZT");
 				
@@ -155,7 +155,7 @@ for (FolderNum=0; FolderNum<listOfPaths.length; FolderNum++) {
 				save(DMP_out + newtitle);
 				close();
 			}
-			print("\\Update10:   Processing CRP images -- Complete!");
+			print("\\Update10:   Processing DMP images -- Complete!");
 
 
 			// Create tooth image previews
