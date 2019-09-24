@@ -25,12 +25,14 @@ run("Clear Results");
 // Select input directories
 
 #@ File[] listOfPaths(label="select files or folders", style="both")
-#@ Integer(label="Start at tooth number:", value = 0, style="spinner", description="Leave at 0 to start from beginning.") ToothStart
+#@ Integer(label="Start at tooth number:", value = 1, style="spinner", description="Leave at 0 to start from beginning.") ToothStart
 
 print("\\Clear");
 print("\\Update0:Registering tooth images...");
 setBatchMode(true);
-
+if (ToothStart <= 0){
+	exit("Starting tooth should be set to 1, or greater.");
+}
 ToothStart = ToothStart-1;
 
 for (FolderNum=0; FolderNum<listOfPaths.length; FolderNum++) {
